@@ -1,0 +1,10 @@
+[
+  {"codigo_sensor": "ESP32-TL01", "data_hora": "2026-05-10 08:00:00", "umidade_solo_pct": 31.4, "ph_solo": 5.3, "nitrogenio_mg_dm3": 24.0, "fosforo_mg_dm3": 9.5, "potassio_mg_dm3": 72.0, "temperatura_c": 26.8, "bomba_ligada": 1},
+  {"codigo_sensor": "ESP32-TL01", "data_hora": "2026-05-10 14:00:00", "umidade_solo_pct": 54.2, "ph_solo": 6.1, "nitrogenio_mg_dm3": 38.0, "fosforo_mg_dm3": 16.0, "potassio_mg_dm3": 115.0, "temperatura_c": 24.1, "bomba_ligada": 0},
+  {"codigo_sensor": "ESP32-TL02", "data_hora": "2026-05-10 08:00:00", "umidade_solo_pct": 28.9, "ph_solo": 5.1, "nitrogenio_mg_dm3": 21.5, "fosforo_mg_dm3": 8.0, "potassio_mg_dm3": 68.0, "temperatura_c": 27.5, "bomba_ligada": 1},
+  {"codigo_sensor": "ESP32-TL02", "data_hora": "2026-05-10 14:00:00", "umidade_solo_pct": 48.7, "ph_solo": 5.9, "nitrogenio_mg_dm3": 34.0, "fosforo_mg_dm3": 14.2, "potassio_mg_dm3": 98.0, "temperatura_c": 25.0, "bomba_ligada": 0},
+  {"codigo_sensor": "ESP32-TL03", "data_hora": "2026-05-10 08:00:00", "umidade_solo_pct": 61.5, "ph_solo": 6.3, "nitrogenio_mg_dm3": 44.0, "fosforo_mg_dm3": 19.5, "potassio_mg_dm3": 130.0, "temperatura_c": 22.4, "bomba_ligada": 0},
+  {"codigo_sensor": "ESP32-TL03", "data_hora": "2026-05-10 14:00:00", "umidade_solo_pct": 33.8, "ph_solo": 5.4, "nitrogenio_mg_dm3": 26.0, "fosforo_mg_dm3": 11.0, "potassio_mg_dm3": 82.0, "temperatura_c": 26.2, "bomba_ligada": 1},
+  {"codigo_sensor": "ESP32-TL04", "data_hora": "2026-05-10 08:00:00", "umidade_solo_pct": 58.0, "ph_solo": 6.0, "nitrogenio_mg_dm3": 41.0, "fosforo_mg_dm3": 18.0, "potassio_mg_dm3": 122.0, "temperatura_c": 23.5, "bomba_ligada": 0},
+  {"codigo_sensor": "ESP32-TL04", "data_hora": "2026-05-10 14:00:00", "umidade_solo_pct": 29.5, "ph_solo": 5.2, "nitrogenio_mg_dm3": 22.0, "fosforo_mg_dm3": 9.0, "potassio_mg_dm3": 74.0, "temperatura_c": 28.1, "bomba_ligada": 1}
+]
