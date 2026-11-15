@@ -370,10 +370,10 @@ def gerar_grafico_relatorio(df_rel: pd.DataFrame, out_path: Path | None = None) 
 
 
 def executar_demo(sqlite_path: Path = DEFAULT_SQLITE_PATH) -> dict:
-    """Executa o fluxo completo não-interativo (seed, importação Fase 2, CRUD e gráficos)."""
+    """Executa o fluxo completo no SQLite (seed, importação da Fase 2, CRUD e gráficos)."""
     if Path(sqlite_path).exists():
         Path(sqlite_path).unlink()
-    conn, motor = get_connection(sqlite_path)
+    conn, motor = get_connection(sqlite_path, engine="sqlite")
     try:
         inseridos = importar_leituras_fase2(conn)
         # Demonstra CREATE + UPDATE + DELETE em registro de calibração

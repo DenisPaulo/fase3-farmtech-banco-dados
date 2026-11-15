@@ -1,11 +1,10 @@
-"""Camada de conexão com Oracle Database e fallback automático em SQLite.
+"""Camada de conexão com Oracle Database e com o SQLite local.
 
-Seguindo o padrão de segurança dos projetos anteriores da FarmTech / CanaTech,
-as credenciais do Oracle são lidas exclusivamente de variáveis de ambiente
-(`.env.example`). Quando as variáveis `ORACLE_USER`/`ORACLE_PASSWORD` não estão
-definidas ou o servidor Oracle não está acessível localmente, o módulo ativa
-automaticamente um banco relacional SQLite com o mesmo modelo de 5 tabelas
-(`CULTURAS`, `TALHOES`, `SENSORES`, `LEITURAS_SENSORES` e `APLICACOES_INSUMOS`).
+As credenciais do Oracle vêm das variáveis de ambiente (veja `.env.example`).
+`FARMTECH_DB_ENGINE` escolhe o motor: `sqlite`, `oracle` ou `auto`.
+Em `auto`, credenciais preenchidas abrem o Oracle e o placeholder `seu_usuario` abre o SQLite
+com as tabelas `CULTURAS`, `TALHOES`, `SENSORES`, `LEITURAS_SENSORES` e `APLICACOES_INSUMOS`.
+A demonstração (`python main.py --demo`) e a suíte de testes usam o SQLite.
 """
 
 from __future__ import annotations
@@ -105,16 +104,40 @@ def tentar_conectar_oracle():
         return None
 
 
-def get_connection(sqlite_path: Path | str = DEFAULT_SQLITE_PATH) -> tuple[sqlite3.Connection, str]:
-    """Retorna `(conexao, motor)` garantindo que o schema relacional exista."""
-    ora_conn = tentar_conectar_oracle()
-    if ora_conn is not None:
-        return ora_conn, "Oracle Database"
-
+def _abrir_sqlite(sqlite_path: Path | str) -> sqlite3.Connection:
     db_path = Path(sqlite_path)
     db_path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(db_path))
     conn.row_factory = sqlite3.Row
     conn.executescript(SQLITE_DDL)
     conn.commit()
-    return conn, "SQLite (fallback compatível com schema Oracle)"
+    return conn
+
+
+def get_connection(
+    sqlite_path: Path | str = DEFAULT_SQLITE_PATH,
+    engine: str | None = None,
+) -> tuple[sqlite3.Connection, str]:
+    """Retorna `(conexao, motor)` com o schema relacional disponível.
+
+    O motor efetivo sai de `engine` ou, com `engine` vazio, de `FARMTECH_DB_ENGINE`
+    (`sqlite`, `oracle` ou `auto`). O padrão é `auto`.
+    """
+    escolha = (engine or os.getenv("FARMTECH_DB_ENGINE") or "auto").strip().lower()
+    rotulo_sqlite = "SQLite (fallback compatível com schema Oracle)"
+    if escolha == "sqlite":
+        return _abrir_sqlite(sqlite_path), rotulo_sqlite
+    if escolha == "oracle":
+        ora_conn = tentar_conectar_oracle()
+        if ora_conn is None:
+            raise ConnectionError(
+                "Conexão Oracle indisponível. Revise ORACLE_USER, ORACLE_PASSWORD, "
+                "ORACLE_HOST, ORACLE_PORT e ORACLE_SERVICE."
+            )
+        return ora_conn, "Oracle Database"
+    if escolha == "auto":
+        ora_conn = tentar_conectar_oracle()
+        if ora_conn is not None:
+            return ora_conn, "Oracle Database"
+        return _abrir_sqlite(sqlite_path), rotulo_sqlite
+    raise ValueError(f"Motor de banco desconhecido: {escolha}")
